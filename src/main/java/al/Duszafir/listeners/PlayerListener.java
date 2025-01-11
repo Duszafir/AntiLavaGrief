@@ -3,6 +3,7 @@ package al.Duszafir.listeners;
 import al.Duszafir.AntiLavaGrieff;
 import al.Duszafir.utils.MessageUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -13,6 +14,11 @@ import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -35,6 +41,7 @@ public class PlayerListener implements Listener {
                         Bukkit.broadcastMessage(
                                 MessageUtils.getColoredMessage(
                                         AntiLavaGrieff.prefix + "&4" + player.getName() + " has burned a " + blockName + " with a " + itemName));
+                        logGriefAttempt(player.getName(), block.getLocation());
                     }
                 }
             }
@@ -58,11 +65,11 @@ public class PlayerListener implements Listener {
                     Bukkit.broadcastMessage(
                             MessageUtils.getColoredMessage(
                                     AntiLavaGrieff.prefix + "&4" + placer.getName() + " burned " + blockName));
+                    logGriefAttempt(placer.getName(), targetBlock.getLocation());
                 }
             }
         }
     }
-
 
     private boolean isPlanks(Material material) {
         return material.name().endsWith("PLANKS");
@@ -80,4 +87,26 @@ public class PlayerListener implements Listener {
         String formatted = name.toLowerCase().replace("_", " ");
         return formatted.substring(0, 1).toUpperCase() + formatted.substring(1);
     }
+
+    private void logGriefAttempt(String playerName, Location location) {
+        String logEntry = String.format(
+                "[%s] Player %s attempted to place lava at %d, %d, %d (World: %s)%n",
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+                playerName,
+                location.getBlockX(),
+                location.getBlockY(),
+                location.getBlockZ(),
+                location.getWorld().getName()
+        );
+
+        File logFile = new File(AntiLavaGrieff.getInstance().getDataFolder(), "grief_logs.txt");
+
+        try (FileWriter writer = new FileWriter(logFile, true)) {
+            writer.write(logEntry);
+        } catch (IOException e) {
+            Bukkit.getLogger().severe("The log file could not be created.");
+            e.printStackTrace();
+        }
+    }
+
 }

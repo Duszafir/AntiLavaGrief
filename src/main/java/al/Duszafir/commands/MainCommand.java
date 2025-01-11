@@ -20,6 +20,9 @@ public class MainCommand implements CommandExecutor {
         if (args[0].equalsIgnoreCase("author")){
             sender.sendMessage(MessageUtils.getColoredMessage(AntiLavaGrieff.prefix + "&aThe Author is &6&lDuszafir"));
             return true;
+        } else if (args[0].equalsIgnoreCase("help")) {
+            help(sender);
+            return true;
         } else if (!sender.hasPermission("antilavagrief.commands.maincommand")){
             sender.sendMessage(MessageUtils.getColoredMessage(AntiLavaGrieff.prefix + "&4You do not have permissions to run this command"));
             return true;
@@ -35,12 +38,22 @@ public class MainCommand implements CommandExecutor {
             } else if (args[0].equalsIgnoreCase("version")){
                     sender.sendMessage(MessageUtils.getColoredMessage(AntiLavaGrieff.prefix + "&aThe version is: &9"+ plugin.getDescription().getVersion()));
             } else {
-                sender.sendMessage(MessageUtils.getColoredMessage(AntiLavaGrieff.prefix + "&4Invalid option. Use 'enable', 'disable' or 'version'."));
+                help(sender);
             }
         } else {
-            sender.sendMessage(MessageUtils.getColoredMessage(AntiLavaGrieff.prefix + "&4Invalid option. Use 'enable', 'disable' or 'version'."));
+            help(sender);
         }
 
         return true;
+    }
+
+    public void help(CommandSender sender){
+        sender.sendMessage(MessageUtils.getColoredMessage("&f----------COMMANDS "+AntiLavaGrieff.prefix+"&f----------"));
+        sender.sendMessage(MessageUtils.getColoredMessage("&7 /al enable"));
+        sender.sendMessage(MessageUtils.getColoredMessage("&7 /al disable"));
+        sender.sendMessage(MessageUtils.getColoredMessage("&7 /al version"));
+        sender.sendMessage(MessageUtils.getColoredMessage("&7 /al author"));
+        sender.sendMessage(MessageUtils.getColoredMessage("&7 /al help"));
+        sender.sendMessage(MessageUtils.getColoredMessage("&f----------COMMANDS "+AntiLavaGrieff.prefix+"&f----------"));
     }
 }
