@@ -15,6 +15,8 @@ Commands:
 
 Use /al enable to activate alerts for when lava or flammable items are placed near wooden planks. 
 Use /al disable to turn off these alerts and stop notifications from appearing.
+Use /al author to see who the Author is
+use /al version to see the version of the Plugin.
 
 Permissions: 
 
