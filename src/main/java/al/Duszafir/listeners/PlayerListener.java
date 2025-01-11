@@ -34,7 +34,7 @@ public class PlayerListener implements Listener {
                         String itemName = formatName(item.getType().name());
                         Bukkit.broadcastMessage(
                                 MessageUtils.getColoredMessage(
-                                        AntiLavaGrieff.prefix + "&4" + player.getName() + " ha quemado un " + blockName + " con un " + itemName));
+                                        AntiLavaGrieff.prefix + "&4" + player.getName() + " has burned a " + blockName + " with a " + itemName));
                     }
                 }
             }
@@ -57,7 +57,7 @@ public class PlayerListener implements Listener {
                     String blockName = targetBlock.getType().name();
                     Bukkit.broadcastMessage(
                             MessageUtils.getColoredMessage(
-                                    AntiLavaGrieff.prefix + "&4" + placer.getName() + " quemo " + blockName));
+                                    AntiLavaGrieff.prefix + "&4" + placer.getName() + " burned " + blockName));
                 }
             }
         }

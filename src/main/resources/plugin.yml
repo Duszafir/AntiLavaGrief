@@ -1,12 +1,11 @@
 main: al.Duszafir.AntiLavaGrieff
-version: 1.0.1
+version: 1.1.0
 name: AntiLavaGrieff
 author: Duszafir
 api-version: 1.13
 
 commands:
   antilavagrief:
-    description: Comando principal del plugin skibidi
+    description: Main Command, /al <enable/disable>
     aliases:
       - al
-
