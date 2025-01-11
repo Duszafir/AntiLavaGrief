@@ -10,3 +10,13 @@ Alerts admins when lava is placed near wood planks.
 Sends a notification when a player uses a flint-and-steel on wooden planks.
 Easy-to-use and customizable configuration.
 Stay one step ahead of potential griefers with AntiLavaGrief!
+
+Commands:
+
+Use /al enable to activate alerts for when lava or flammable items are placed near wooden planks. 
+Use /al disable to turn off these alerts and stop notifications from appearing.
+
+Permissions: 
+
+antilavagrief.commands.maincommand: Grants access to the main plugin commands.
+antilavagrief.evadeGrief: Allows the player to bypass the lava grief alerts and actions.
