@@ -2,9 +2,12 @@ package al.Duszafir.commands;
 
 import al.Duszafir.AntiLavaGrieff;
 import al.Duszafir.utils.MessageUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+
+import java.nio.Buffer;
 
 public class MainCommand implements CommandExecutor {
 
@@ -31,10 +34,10 @@ public class MainCommand implements CommandExecutor {
         if (args.length >= 1) {
             if (args[0].equalsIgnoreCase("enable")) {
                 AntiLavaGrieff.isEnabled = true;
-                sender.sendMessage(MessageUtils.getColoredMessage(AntiLavaGrieff.prefix + "&aLava protection has been activated."));
+                Bukkit.broadcastMessage(MessageUtils.getColoredMessage(AntiLavaGrieff.prefix + "&aLava protection has been activated."));
             } else if (args[0].equalsIgnoreCase("disable")) {
                 AntiLavaGrieff.isEnabled = false;
-                sender.sendMessage(MessageUtils.getColoredMessage(AntiLavaGrieff.prefix + "&cLava protection has been disabled."));
+                Bukkit.broadcastMessage(MessageUtils.getColoredMessage(AntiLavaGrieff.prefix + "&cLava protection has been disabled."));
             } else if (args[0].equalsIgnoreCase("version")){
                     sender.sendMessage(MessageUtils.getColoredMessage(AntiLavaGrieff.prefix + "&aThe version is: &9"+ plugin.getDescription().getVersion()));
             } else {

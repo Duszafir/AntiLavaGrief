@@ -21,39 +21,56 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class PlayerListener implements Listener {
 
     private final HashMap<Block, UUID> lavaPlacers = new HashMap<>();
+    private final ConcurrentHashMap<UUID, Long> cooldowns = new ConcurrentHashMap<>();
+    private static final long COOLDOWN_TIME = 10000;
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         ItemStack item = event.getItem();
         Block block = event.getClickedBlock();
-        if (AntiLavaGrieff.isEnabled){
-            if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-                if (!player.hasPermission("antilavagrief.evadeGrief")) {
-                    if (block != null && isPlanks(block.getType()) &&
-                            (item.getType().equals(Material.FLINT_AND_STEEL) || item.getType().equals(Material.LAVA_BUCKET) || item.getType().equals(Material.LAVA))) {
-                        String blockName = formatName(block.getType().name());
-                        String itemName = formatName(item.getType().name());
-                        Bukkit.broadcastMessage(
-                                MessageUtils.getColoredMessage(
-                                        AntiLavaGrieff.prefix + "&4" + player.getName() + " has burned a " + blockName + " with a " + itemName));
-                        logGriefAttempt(player.getName(), block.getLocation());
+
+        if (AntiLavaGrieff.isEnabled) {
+            if (event.getAction() == Action.RIGHT_CLICK_BLOCK && block != null) {
+                if (item != null && (item.getType() == Material.LAVA_BUCKET || item.getType() == Material.FLINT_AND_STEEL)) {
+                    if (isPlanks(block.getType())) {
+                        if (!player.hasPermission("antilavagrief.bypassCooldown")) {
+                            if (isOnCooldown(player)) {
+                                long timeLeft = (COOLDOWN_TIME - (System.currentTimeMillis() - cooldowns.get(player.getUniqueId()))) / 1000;
+                                player.sendMessage(MessageUtils.getColoredMessage(AntiLavaGrieff.prefix + "&cYou need to wait &f" + timeLeft + "&c more seconds before using that again!"));
+
+                                event.setCancelled(true);
+                                return;
+                            }
+                            startCooldown(player);
+                        }
+
+                        if (!player.hasPermission("antilavagrief.evadeGrief")) {
+                            String blockName = formatName(block.getType().name());
+                            String itemName = formatName(item.getType().name());
+                            Bukkit.broadcastMessage(
+                                    MessageUtils.getColoredMessage(
+                                            AntiLavaGrieff.prefix + "&4" + player.getName() + " has burned a " + blockName + " with a " + itemName));
+                            logGriefAttempt(player.getName(), block.getLocation());
+                        }
                     }
                 }
             }
         }
     }
 
+
     @EventHandler
     public void onLavaFlow(BlockFromToEvent event) {
         Block sourceBlock = event.getBlock();
         Block targetBlock = event.getToBlock().getRelative(0, -1, 0);
 
-        if (AntiLavaGrieff.isEnabled){
+        if (AntiLavaGrieff.isEnabled) {
             if (sourceBlock.getType() == Material.LAVA && isPlanksBlock(targetBlock)) {
                 Player placer = (Player) sourceBlock.getWorld().getEntities().stream()
                         .filter(entity -> entity instanceof Player)
@@ -69,6 +86,16 @@ public class PlayerListener implements Listener {
                 }
             }
         }
+    }
+
+    private boolean isOnCooldown(Player player) {
+        UUID playerId = player.getUniqueId();
+        long currentTime = System.currentTimeMillis();
+        return cooldowns.containsKey(playerId) && (currentTime - cooldowns.get(playerId) < COOLDOWN_TIME);
+    }
+
+    private void startCooldown(Player player) {
+        cooldowns.put(player.getUniqueId(), System.currentTimeMillis());
     }
 
     private boolean isPlanks(Material material) {
@@ -108,5 +135,4 @@ public class PlayerListener implements Listener {
             e.printStackTrace();
         }
     }
-
 }
