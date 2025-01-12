@@ -1,6 +1,7 @@
 package al.Duszafir.listeners;
 
 import al.Duszafir.AntiLavaGrieff;
+import al.Duszafir.commands.MainCommand;
 import al.Duszafir.utils.MessageUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -34,12 +35,13 @@ public class PlayerListener implements Listener {
         Player player = event.getPlayer();
         ItemStack item = event.getItem();
         Block block = event.getClickedBlock();
+        boolean isCooldownActive = MainCommand.isCooldownEnabled();
 
         if (AntiLavaGrieff.isEnabled) {
             if (event.getAction() == Action.RIGHT_CLICK_BLOCK && block != null) {
                 if (item != null && (item.getType() == Material.LAVA_BUCKET || item.getType() == Material.FLINT_AND_STEEL)) {
                     if (isPlanks(block.getType())) {
-                        if (!player.hasPermission("antilavagrief.bypassCooldown")) {
+                        if (isCooldownActive && !player.hasPermission("antilavagrief.bypassCooldown")) {
                             if (isOnCooldown(player)) {
                                 long timeLeft = (COOLDOWN_TIME - (System.currentTimeMillis() - cooldowns.get(player.getUniqueId()))) / 1000;
                                 player.sendMessage(MessageUtils.getColoredMessage(AntiLavaGrieff.prefix + "&cYou need to wait &f" + timeLeft + "&c more seconds before using that again!"));

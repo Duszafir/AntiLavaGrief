@@ -31,12 +31,12 @@ public class AntiLavaGrieff extends JavaPlugin {
             dataFolder.mkdir();
         }
 
-        Bukkit.getConsoleSender().sendMessage(MessageUtils.getColoredMessage(prefix+"&fHas been activated! &9Version:"+version));
+        Bukkit.getConsoleSender().sendMessage(MessageUtils.getColoredMessage(prefix+"&fHas been activated! &9Version: "+version));
         Bukkit.getConsoleSender().sendMessage(MessageUtils.getColoredMessage(prefix+"&fThanks for using this plugin!"));
     }
 
     public void onDisable() {
-        Bukkit.getConsoleSender().sendMessage(MessageUtils.getColoredMessage(prefix+"&fHas been deactivated. &9Version:"+version));
+        Bukkit.getConsoleSender().sendMessage(MessageUtils.getColoredMessage(prefix+"&fHas been deactivated. &9Version: "+version));
         Bukkit.getConsoleSender().sendMessage(MessageUtils.getColoredMessage(prefix+"&fThanks for using this plugin!"));
     }
 
