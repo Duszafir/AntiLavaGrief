@@ -1,0 +1,16 @@
+# AntiLavaGrieff Configuration
+messages:
+  anti_grief_enable_text: "&aLava protection has been activated."
+  cooldown_text: "&cYou need to wait &f%timeLeft%&c more seconds before using that again!"
+  grief_text: "&4%player% has burned a %block% with a %item%"
+  lava_place_text: "&4%placer% burned %block%"
+config:
+  cooldown:
+    enabled: true
+    # Cooldown time in seconds
+    cooldown-time: 9
+  # List of worlds where the plugin works
+  worlds:
+    - "world"
+    - "world_nether"
+    - "world_the_end"

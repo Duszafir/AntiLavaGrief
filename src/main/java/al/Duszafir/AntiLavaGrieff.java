@@ -1,6 +1,7 @@
 package al.Duszafir;
 
 import al.Duszafir.commands.MainCommand;
+import al.Duszafir.config.MainConfigManager;
 import al.Duszafir.listeners.PlayerListener;
 import al.Duszafir.utils.MessageUtils;
 import org.bukkit.Bukkit;
@@ -16,6 +17,7 @@ public class AntiLavaGrieff extends JavaPlugin {
     public String version = getDescription().getVersion();
     private static AntiLavaGrieff instance;
     public static boolean isEnabled = true;
+    private MainConfigManager mainConfigManager;
 
     public static AntiLavaGrieff getInstance() {
         return instance;
@@ -24,6 +26,7 @@ public class AntiLavaGrieff extends JavaPlugin {
     public void onEnable() {
         registerCommands();
         registerEvents();
+        mainConfigManager = new MainConfigManager(this);
         instance = this;
         createLogFile();
         File dataFolder = getDataFolder();
@@ -45,7 +48,11 @@ public class AntiLavaGrieff extends JavaPlugin {
     }
 
     public void registerEvents() {
-        getServer().getPluginManager().registerEvents(new PlayerListener(), this);
+        getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
+    }
+
+    public MainConfigManager getMainConfigManager() {
+        return mainConfigManager;
     }
 
     private void createLogFile() {

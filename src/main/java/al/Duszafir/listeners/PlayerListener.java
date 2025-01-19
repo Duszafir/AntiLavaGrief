@@ -21,10 +21,17 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class PlayerListener implements Listener {
+
+    private AntiLavaGrieff plugin;
+
+    public PlayerListener(AntiLavaGrieff plugin){
+        this.plugin = plugin;
+    }
 
     private final HashMap<Block, UUID> lavaPlacers = new HashMap<>();
     private final ConcurrentHashMap<UUID, Long> cooldowns = new ConcurrentHashMap<>();
@@ -35,35 +42,41 @@ public class PlayerListener implements Listener {
         Player player = event.getPlayer();
         ItemStack item = event.getItem();
         Block block = event.getClickedBlock();
-        boolean isCooldownActive = MainCommand.isCooldownEnabled();
+        Boolean isCooldownActive = plugin.getMainConfigManager().isCooldownEnable();
+        int cooldownTime = plugin.getMainConfigManager().getCooldownInt() * 1000;
+        List<String> worlds = plugin.getMainConfigManager().getWorlds();
 
-        if (AntiLavaGrieff.isEnabled) {
+        if (AntiLavaGrieff.isEnabled && worlds.contains(player.getWorld().getName())) {
             if (event.getAction() == Action.RIGHT_CLICK_BLOCK && block != null) {
                 if (item != null && (item.getType() == Material.LAVA_BUCKET || item.getType() == Material.FLINT_AND_STEEL)) {
                     if (isPlanks(block.getType())) {
                         if (isCooldownActive && !player.hasPermission("antilavagrief.bypassCooldown")) {
                             if (isOnCooldown(player)) {
-                                long timeLeft = (COOLDOWN_TIME - (System.currentTimeMillis() - cooldowns.get(player.getUniqueId()))) / 1000;
-                                player.sendMessage(MessageUtils.getColoredMessage(AntiLavaGrieff.prefix + "&cYou need to wait &f" + timeLeft + "&c more seconds before using that again!"));
+                                long timeLeft = (cooldowns.get(player.getUniqueId()) + cooldownTime - System.currentTimeMillis()) / 1000;
+                                player.sendMessage(MessageUtils.getColoredMessage(AntiLavaGrieff.prefix + plugin.getMainConfigManager().getCooldownTxt().replace("%timeLeft%",String.valueOf(timeLeft))));
 
                                 event.setCancelled(true);
                                 return;
                             }
-                            startCooldown(player);
+                            startCooldown(player, cooldownTime);
                         }
 
                         if (!player.hasPermission("antilavagrief.evadeGrief")) {
                             String blockName = formatName(block.getType().name());
                             String itemName = formatName(item.getType().name());
-                            Bukkit.broadcastMessage(
-                                    MessageUtils.getColoredMessage(
-                                            AntiLavaGrieff.prefix + "&4" + player.getName() + " has burned a " + blockName + " with a " + itemName));
+                            Bukkit.broadcastMessage(MessageUtils.getColoredMessage(AntiLavaGrieff.prefix + plugin.getMainConfigManager().getGriefTxt().replace(
+                                    "%player%", player.getName()).replace("%block%",blockName).replace("%item%",itemName)));
                             logGriefAttempt(player.getName(), block.getLocation());
                         }
                     }
                 }
             }
         }
+    }
+
+    private void startCooldown(Player player, int cooldownTime) {
+        cooldowns.put(player.getUniqueId(), System.currentTimeMillis());
+        Bukkit.getScheduler().runTaskLater(plugin, () -> cooldowns.remove(player.getUniqueId()), cooldownTime / 50);
     }
 
 
@@ -82,8 +95,8 @@ public class PlayerListener implements Listener {
                 if (placer != null && !placer.hasPermission("antilavagrief.evadeGrief")) {
                     String blockName = targetBlock.getType().name();
                     Bukkit.broadcastMessage(
-                            MessageUtils.getColoredMessage(
-                                    AntiLavaGrieff.prefix + "&4" + placer.getName() + " burned " + blockName));
+                            MessageUtils.getColoredMessage(AntiLavaGrieff.prefix +
+                                    plugin.getMainConfigManager().getLavaGriefTxt().replace("%placer%", placer.getName()).replace("%block%",blockName)));
                     logGriefAttempt(placer.getName(), targetBlock.getLocation());
                 }
             }

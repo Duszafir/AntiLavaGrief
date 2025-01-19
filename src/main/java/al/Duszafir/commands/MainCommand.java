@@ -37,14 +37,14 @@ public class MainCommand implements CommandExecutor {
 
         if (args[0].equalsIgnoreCase("enable")) {
             AntiLavaGrieff.isEnabled = true;
-            Bukkit.broadcastMessage(MessageUtils.getColoredMessage(AntiLavaGrieff.prefix + "&aLava protection has been activated."));
+            Bukkit.broadcastMessage(MessageUtils.getColoredMessage(AntiLavaGrieff.prefix +plugin.getMainConfigManager().getAntiGriefEnableText()));
         } else if (args[0].equalsIgnoreCase("disable")) {
             AntiLavaGrieff.isEnabled = false;
             Bukkit.broadcastMessage(MessageUtils.getColoredMessage(AntiLavaGrieff.prefix + "&cLava protection has been disabled."));
         } else if (args[0].equalsIgnoreCase("version")) {
             sender.sendMessage(MessageUtils.getColoredMessage(AntiLavaGrieff.prefix + "&aThe version is: &9" + plugin.getDescription().getVersion()));
-        } else if (args[0].equalsIgnoreCase("cooldown")) {
-            handleCooldownCommand(sender, args);
+        } else if (args[0].equalsIgnoreCase("reload")) {
+            commandReload(sender);
         } else {
             help(sender);
         }
@@ -52,27 +52,6 @@ public class MainCommand implements CommandExecutor {
         return true;
     }
 
-    private void handleCooldownCommand(CommandSender sender, String[] args) {
-        if (!sender.isOp()) {
-            sender.sendMessage(MessageUtils.getColoredMessage(AntiLavaGrieff.prefix + "&4You do not have permissions to use this command"));
-            return;
-        }
-
-        if (args.length < 2) {
-            sender.sendMessage(MessageUtils.getColoredMessage(AntiLavaGrieff.prefix + "&cUsage: /al cooldown <enable/disable>"));
-            return;
-        }
-
-        if (args[1].equalsIgnoreCase("enable")) {
-            cooldownEnabled = true;
-            Bukkit.broadcastMessage(MessageUtils.getColoredMessage(AntiLavaGrieff.prefix + "&aCooldown has been enabled."));
-        } else if (args[1].equalsIgnoreCase("disable")) {
-            cooldownEnabled = false;
-            Bukkit.broadcastMessage(MessageUtils.getColoredMessage(AntiLavaGrieff.prefix + "&cCooldown has been disabled."));
-        } else {
-            sender.sendMessage(MessageUtils.getColoredMessage(AntiLavaGrieff.prefix + "&cInvalid option. Use /al cooldown <enable/disable>"));
-        }
-    }
 
     public static boolean isCooldownEnabled() {
         return cooldownEnabled;
@@ -85,7 +64,16 @@ public class MainCommand implements CommandExecutor {
         sender.sendMessage(MessageUtils.getColoredMessage("&7 /al version"));
         sender.sendMessage(MessageUtils.getColoredMessage("&7 /al author"));
         sender.sendMessage(MessageUtils.getColoredMessage("&7 /al help"));
-        sender.sendMessage(MessageUtils.getColoredMessage("&7 /al cooldown <enable/disable>"));
+        sender.sendMessage(MessageUtils.getColoredMessage("&7 /al reload"));
         sender.sendMessage(MessageUtils.getColoredMessage("&f----------COMMANDS " + AntiLavaGrieff.prefix + "&f----------"));
+    }
+
+    public void commandReload(CommandSender sender){
+        if (!sender.hasPermission("antilavagrief.commands.reload")){
+            sender.sendMessage(MessageUtils.getColoredMessage(AntiLavaGrieff.prefix + "&4You do not have permissions to use this command"));
+            return;
+        }
+        plugin.getMainConfigManager().reloadConfig();
+        sender.sendMessage(MessageUtils.getColoredMessage(AntiLavaGrieff.prefix + "&aConfiguration loaded correctly"));
     }
 }
