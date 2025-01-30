@@ -18,6 +18,11 @@ public class MainConfigManager {
     private boolean cooldownEnable;
     private int cooldownInt;
     private List<String> worlds;
+    private boolean banPlaceEnabled;
+    private List<String> allowedBlocks;
+    private String banPlaceTxt;
+    private List<String> banBlocksList;
+    private boolean antiDispenserEnabled;
 
     public MainConfigManager(AntiLavaGrieff plugin){
         this.plugin = plugin;
@@ -35,6 +40,11 @@ public class MainConfigManager {
         griefTxt = config.getString("messages.grief_text");
         lavaGriefTxt = config.getString("messages.lava_place_text");
         worlds = config.getStringList("config.worlds");
+        banPlaceEnabled = config.getBoolean("config.block_lava_place.enabled");
+        allowedBlocks = config.getStringList("config.block_lava_place.allowed_blocks");
+        banPlaceTxt = config.getString("messages.ban_lava_place");
+        banBlocksList = config.getStringList("ban_blocks");
+        antiDispenserEnabled = config.getBoolean("config.anti_dispenser_and_hopper.enabled");
     }
 
     public void reloadConfig(){
@@ -68,5 +78,25 @@ public class MainConfigManager {
 
     public List<String> getWorlds() {
         return worlds;
+    }
+
+    public boolean isBanPlaceEnabled() {
+        return banPlaceEnabled;
+    }
+
+    public List<String> getAllowedBlocks() {
+        return allowedBlocks;
+    }
+
+    public String getBanPlaceTxt() {
+        return banPlaceTxt;
+    }
+
+    public List<String> getBanBlocksList() {
+        return banBlocksList;
+    }
+
+    public boolean isAntiDispenserEnabled() {
+        return antiDispenserEnabled;
     }
 }

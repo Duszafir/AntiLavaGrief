@@ -3,6 +3,7 @@ package al.Duszafir;
 import al.Duszafir.commands.MainCommand;
 import al.Duszafir.config.MainConfigManager;
 import al.Duszafir.listeners.PlayerListener;
+import al.Duszafir.utils.BannedBlocks;
 import al.Duszafir.utils.MessageUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -33,6 +34,7 @@ public class AntiLavaGrieff extends JavaPlugin {
         if (!dataFolder.exists()) {
             dataFolder.mkdir();
         }
+        BannedBlocks.initialize(this);
 
         Bukkit.getConsoleSender().sendMessage(MessageUtils.getColoredMessage(prefix+"&fHas been activated! &9Version: "+version));
         Bukkit.getConsoleSender().sendMessage(MessageUtils.getColoredMessage(prefix+"&fThanks for using this plugin!"));

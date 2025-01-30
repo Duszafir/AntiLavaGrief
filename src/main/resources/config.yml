@@ -4,11 +4,33 @@ messages:
   cooldown_text: "&cYou need to wait &f%timeLeft%&c more seconds before using that again!"
   grief_text: "&4%player% has burned a %block% with a %item%"
   lava_place_text: "&4%placer% burned %block%"
+  ban_lava_place: "&cYou cant place lava or use the flint and steel here"
+
+ban_blocks:
+  - "LAVA_BUCKET"
+  - "FLINT_AND_STEEL"
+  - "FIRE_CHARGE"
+
 config:
+  # Prohibits players from placing lava and using flint and steel
+  # Function not recommended!
+  block_lava_place:
+    enabled: false
+    # Blocks allowed to place lava or the flint and steel.
+    # Write the exact name and in capital letters or it will not work
+    allowed_blocks:
+      - "OBSIDIAN"
+      - "FIRE" # Leave this to prevent bugs
   cooldown:
     enabled: true
     # Cooldown time in seconds
     cooldown-time: 9
+
+  anti_dispenser_and_hopper:
+    # Prohibits placing prohibited blocks in dispensers or allowing them to be picked up by a hopper.
+    enabled: true
+
+
   # List of worlds where the plugin works
   worlds:
     - "world"
