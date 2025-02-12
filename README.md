@@ -25,11 +25,15 @@ antilavagrief.bypassCooldown: Allows the player to bypass the lava and flint-ste
 
 antilavagrief.commands.reload: Allows the player to reload plugin configuration
 
+antilavagrief.bypass_dispenser: Allows players to bypass restrictions on placing prohibited items on dispensers and hoppers
+
 
 Directories:
 
 config.yml
 grief_logs.txt
-IMPORTANT
+Stay one step ahead of potential griefers with AntiLavaGrief!
 
-This plugin does not prevent players from burning wood, instead, every time they do, it sends a notification to the chat and applies a cooldown. Additionally, it logs each attempt in a file for record-keeping.
+You can contact me on my social pages found on my website:
+
+https://duszafir.netlify.app/
