@@ -23,6 +23,8 @@ public class MainConfigManager {
     private String banPlaceTxt;
     private List<String> banBlocksList;
     private boolean antiDispenserEnabled;
+    private boolean antiLavaCast;
+    private int lavaCastBlocks;
 
     public MainConfigManager(AntiLavaGrieff plugin){
         this.plugin = plugin;
@@ -45,6 +47,8 @@ public class MainConfigManager {
         banPlaceTxt = config.getString("messages.ban_lava_place");
         banBlocksList = config.getStringList("ban_blocks");
         antiDispenserEnabled = config.getBoolean("config.anti_dispenser_and_hopper.enabled");
+        antiLavaCast = config.getBoolean("config.anti_lavacast.enabled");
+        lavaCastBlocks = config.getInt("config.anti_lavacast.blocks");
     }
 
     public void reloadConfig(){
@@ -98,5 +102,13 @@ public class MainConfigManager {
 
     public boolean isAntiDispenserEnabled() {
         return antiDispenserEnabled;
+    }
+
+    public boolean isAntiLavaCast() {
+        return antiLavaCast;
+    }
+
+    public int getLavaCastBlocks() {
+        return lavaCastBlocks;
     }
 }

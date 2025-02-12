@@ -2,6 +2,7 @@ package al.Duszafir;
 
 import al.Duszafir.commands.MainCommand;
 import al.Duszafir.config.MainConfigManager;
+import al.Duszafir.listeners.LavaCastListener;
 import al.Duszafir.listeners.PlayerListener;
 import al.Duszafir.utils.BannedBlocks;
 import al.Duszafir.utils.MessageUtils;
@@ -51,6 +52,7 @@ public class AntiLavaGrieff extends JavaPlugin {
 
     public void registerEvents() {
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
+        getServer().getPluginManager().registerEvents(new LavaCastListener(this), this);
     }
 
     public MainConfigManager getMainConfigManager() {

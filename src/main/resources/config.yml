@@ -30,6 +30,12 @@ config:
     # Prohibits placing prohibited blocks in dispensers or allowing them to be picked up by a hopper.
     enabled: true
 
+  anti_lavacast:
+    # Prohibits players from making stone with water and lava to prevent possible lavacast
+    enabled: true
+    # I do not recommend putting less than 20 because there are blocks that are generated naturally that could modify the operation
+    blocks: 20
+
 
   # List of worlds where the plugin works
   worlds:
