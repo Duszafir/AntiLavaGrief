@@ -89,3 +89,4 @@ Puedes contactarme en mis redes sociales a través de mi sitio web:
 🔗 [https://duszafir.netlify.app/](https://duszafir.netlify.app/)  
 
 ---
+(English version on spigot, https://www.spigotmc.org/resources/antilavagrieff.121853/)
